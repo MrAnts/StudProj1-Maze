@@ -31,6 +31,7 @@ struct SGameChar
 {
     COORD m_cLocation;
     bool  m_bActive;
+	bool  m_bActive2; // Added this for colorModifier2
 };
 
 void init        ( void );      // initialize your variables, allocate memory, etc

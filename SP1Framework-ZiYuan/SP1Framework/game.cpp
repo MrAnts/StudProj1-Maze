@@ -9,12 +9,22 @@
 
 //READ THIS! - Zi Yuan
 /*
-Everything is not touched except for this stuff, I hope this makes it easier for you to merge
+Everything is not touched except for this stuff, I hope this makes it easier for you to merge and I commented on the stuff I added/edited
 STUFF ADDED & EDITED:
 
+	game.h
+		struct SGameChar
+		{
+			bool  m_bActive2;
+		}
+			Added because of colorModifier2
+
 	struct colorModifier;
+	struct colorModifier2;
 	colorModifier colorModifierColor;
+	colorModifier2 colorModifierColor2;
 	bool colorchanged = false;
+	bool colorchanged2 = false;
 		This stuff are for the color modifiers
 
 	void splashScreenWait()
@@ -29,13 +39,14 @@ STUFF ADDED & EDITED:
 		This part is heavily edited, please take a look at this part as it is core of the color modifier
 
 	void renderColorModifier(colorModifier& colorModifier)
+	void renderColorModifier2(colorModifier2& colorModifier2)
 	void colorModifierCollision()
-		This two functions are added, they are the core of the color modifier, please take a look
+		These three functions are added, they are the core of the color modifier, please take a look
 
 	void renderGame()
-		I moved this function down to the bottom to allow 2 of the above functions to be rendered
-		If the function was still at where it was, the 2 added functions cannot compile and render
-		And I added 2 of the above functions into this function to allow them to be rendered
+		I moved this function down to the bottom to allow 3 of the above functions to be rendered
+		If the function was still at where it was, the 3 added functions cannot compile and render
+		And I added 3 of the above functions into this function to allow them to be rendered
 
 	If you need a color scheme:
 		To implement a color, use (? is the modifiable value)
@@ -77,6 +88,7 @@ double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger k
 // Console object
 Console g_Console(80, 25, "SP1 Framework");
 
+//Stuff for the color modifiers
 struct colorModifier
 {
 	COORD colorModifierCoord;
@@ -87,8 +99,19 @@ struct colorModifier
 		colorModifierCoord.Y = 10;
 	}
 };
+struct colorModifier2{
+	COORD colorModifierCoord2;
+	bool visible = true;
+	colorModifier2()
+	{
+		colorModifierCoord2.X = 42;
+		colorModifierCoord2.Y = 10;
+	}
+};
 colorModifier colorModifierColor;
+colorModifier2 colorModifierColor2;
 bool colorchanged = false;
+bool colorchanged2 = false;
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -202,7 +225,7 @@ void render()
 
 void splashScreenWait()    // waits for time to pass in splash screen
 {
-    if (g_dElapsedTime > 0) // wait for 3 seconds to switch to game mode, else do nothing
+    if (g_dElapsedTime > 0) // wait for 3 seconds to switch to game mode, else do nothing | edited the 3 seconds out because it's annoying to wait for 3 seconds
         g_eGameState = S_GAME;
 }
 
@@ -245,7 +268,7 @@ void moveCharacter()
         g_sChar.m_cLocation.X++;
         bSomethingHappened = true;
     }
-    /*if (g_abKeyPressed[K_SPACE])
+    /*if (g_abKeyPressed[K_SPACE]) // Edited out to prevent accidental change of color because of testing of color modifiers
     {
         g_sChar.m_bActive = !g_sChar.m_bActive;
         bSomethingHappened = true;
@@ -306,12 +329,19 @@ void renderMap()
 void renderCharacter()
 {
     // Draw the location of the character
-    WORD charColor = 0x1D; // DONT GET MIXED UP, THIS IS THE COLOR AFTER CHANGING/COLLIDING WITH THE COLOR MODIFIER (Purple)
-    if (g_sChar.m_bActive) 
+	//DO NOT GET THIS MIXED UP!
+    WORD charColor = 0x1D; // This is the color AFTER colliding with the 1ST color Modifier (Light Purple)
+
+    if (g_sChar.m_bActive) // The state of the character BEFORE colliding with the 1ST color modifier
     {
-        charColor = 0x1A; // THIS IS THE COLOR BEFORE CHANGING/COLLIDING WITH THE COLOR MODIFIER (Green)
+        charColor = 0x1C; // This is the color BEFORE colliding with the 1ST color modifier (Light Red)
     }
-    g_Console.writeToBuffer(g_sChar.m_cLocation, 'A', charColor);
+
+	if (g_sChar.m_bActive2) // The state of the character AFTER colliding with the 2ND color modifier
+	{
+		charColor = 0x1F; // This is the color AFTER colliding with the 2ND color modifier (Light White)
+	}
+    g_Console.writeToBuffer(g_sChar.m_cLocation, 'C', charColor);
 }
 
 void renderFramerate()
@@ -342,22 +372,41 @@ void renderToScreen()
 void renderColorModifier(colorModifier& colorModifier)
 
 {
-	if (colorModifier.visible)
+	if (colorModifier.visible) // If the color modifier is still on screen
 	{
-		g_Console.writeToBuffer(colorModifierColor.colorModifierCoord, 'B', 0x1E); // This is the color modifier's color (Yellow)
+		g_Console.writeToBuffer(colorModifierColor.colorModifierCoord, '1', 0x19); // This is the color modifier's color (Light Blue)
+	}
+}
+
+void renderColorModifier2(colorModifier2& colorModifier2)
+{
+	if (colorModifier2.visible) // If the 2nd color modifier is still on screen
+	{
+		g_Console.writeToBuffer(colorModifierColor2.colorModifierCoord2, '2', 0x1A); // This is the secon color modifier's color (Light Green);
 	}
 }
 
 void colorModifierCollision()
 {
-	if (g_sChar.m_cLocation.X == colorModifierColor.colorModifierCoord.X && g_sChar.m_cLocation.Y == colorModifierColor.colorModifierCoord.Y)
+	if (g_sChar.m_cLocation.X == colorModifierColor.colorModifierCoord.X && g_sChar.m_cLocation.Y == colorModifierColor.colorModifierCoord.Y) // Checks if player's cooordinates sync with 1st color modifier's coordinates
 	{
-		colorModifierColor.visible = false;
+		colorModifierColor.visible = false; // If synced, 1st color modifier gets removed from screen
 
-		if (!colorchanged)
+		if (!colorchanged) // Check for player color change
 		{
-			colorchanged = true;
-			g_sChar.m_bActive = !g_sChar.m_bActive;
+			colorchanged = true; // Changes player's color
+			g_sChar.m_bActive = !g_sChar.m_bActive; // Light Red to Light Purple
+		}
+	}
+	
+	if (g_sChar.m_cLocation.X == colorModifierColor2.colorModifierCoord2.X && g_sChar.m_cLocation.Y == colorModifierColor2.colorModifierCoord2.Y) // Checks if player's cooordinates sync with 2nd color modifier's coordinates
+	{
+		colorModifierColor2.visible = false; // If synced, 1st color modifier gets removed from screen
+
+		if (!colorchanged2) // Check for player color change
+		{
+			colorchanged2 = true; // Changes player's color
+			g_sChar.m_bActive2 = !g_sChar.m_bActive2; // Light Purple to Light Green
 		}
 	}
 }
@@ -367,5 +416,6 @@ void renderGame()
 	renderMap();        // renders the map to the buffer first
 	renderCharacter();  // renders the character into the buffer
 	renderColorModifier(colorModifierColor); // renders the color modifier
+	renderColorModifier2(colorModifierColor2); // renders the second color modifier
 	colorModifierCollision(); // renders the color modifier collision with the character as well as renders the character color change
 }
