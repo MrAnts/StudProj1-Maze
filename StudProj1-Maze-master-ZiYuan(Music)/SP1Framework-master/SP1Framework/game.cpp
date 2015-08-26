@@ -189,6 +189,12 @@ void init( void )
 
     // sets the width, height and the font name to use in the console
     g_Console.setConsoleFont(0, 16, L"Consolas");
+
+	// plays the background music
+	// (0, 0) = mute
+	// (0, 0xFFFFFFFF) = sound
+	//waveOutSetVolume(0, 0xFFFFFFFF);
+	//PlaySound(TEXT("Mario.wav"), NULL, SND_FILENAME | SND_LOOP | SND_ASYNC); // this is a separate file (Mario.wav) in the folder with the game.cpp, without it you cannot run this
 }
 
 //--------------------------------------------------------------
@@ -459,7 +465,7 @@ void render()
 
 void splashScreenWait()    // waits for time to pass in splash screen
 {
-    if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to game mode, else do nothing
+    if (g_dElapsedTime > 0) // wait for 3 seconds to switch to game mode, else do nothing
         g_eGameState = S_GAME;
 }
 
@@ -480,6 +486,10 @@ void moveCharacter()
     // providing a beep sound whenver we shift the character
 	if (g_abKeyPressed[K_UP] && player1.Coord.Y > 0 && maze[player1.Coord.Y - 1][player1.Coord.X] != 1)
 	{
+		// (0, 0) = mute
+		// (0, 0xFFFFFFFF) = sound
+		waveOutSetVolume(0, 0xFFFFFFFF);
+		PlaySound(TEXT("Up.wav"), NULL, SND_ASYNC); // this is a separate file (Up.wav) in the folder with the game.cpp, without it you cannot run this
 		//Beep(1440, 30);
 		player1.Coord.Y--;
 		bSomethingHappened = true;
@@ -487,18 +497,30 @@ void moveCharacter()
 	}
 	if (g_abKeyPressed[K_LEFT] && player1.Coord.X > 0 && maze[player1.Coord.Y][player1.Coord.X - 1] != 1)
 	{
+		// (0, 0) = mute
+		// (0, 0xFFFFFFFF) = sound
+		waveOutSetVolume(0, 0xFFFFFFFF);
+		PlaySound(TEXT("Left.wav"), NULL, SND_ASYNC); // this is a separate file (Left.wav) in the folder with the game.cpp, without it you cannot run this
 		//Beep(1440, 30);
 		player1.Coord.X--;
 		bSomethingHappened = true;
 	}
 	if (g_abKeyPressed[K_DOWN] && player1.Coord.Y < g_Console.getConsoleSize().Y - 1 && maze[player1.Coord.Y + 1][player1.Coord.X] != 1)
 	{
+		// (0, 0) = mute
+		// (0, 0xFFFFFFFF) = sound
+		waveOutSetVolume(0, 0xFFFFFFFF);
+		PlaySound(TEXT("Down.wav"), NULL, SND_ASYNC); // this is a separate file (Down.wav) in the folder with the game.cpp, without it you cannot run this
 		//Beep(1440, 30);
 		player1.Coord.Y++;
 		bSomethingHappened = true;
 	}
 	if (g_abKeyPressed[K_RIGHT] && player1.Coord.X < g_Console.getConsoleSize().X - 1 && maze[player1.Coord.Y][player1.Coord.X + 1] != 1)
 	{
+		// (0, 0) = mute
+		// (0, 0xFFFFFFFF) = sound
+		waveOutSetVolume(0, 0xFFFFFFFF);
+		PlaySound(TEXT("Right.wav"), NULL, SND_ASYNC); // this is a separate file (Right.wav) in the folder with the game.cpp, without it you cannot run this
 		//Beep(1440, 30);
 		player1.Coord.X++;
 		bSomethingHappened = true;
