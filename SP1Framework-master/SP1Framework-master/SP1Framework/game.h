@@ -2,6 +2,7 @@
 #define _GAME_H
 
 #include "Framework\timer.h"
+#include <string>
 
 extern CStopWatch g_swTimer;
 extern bool g_bQuitGame;
@@ -29,9 +30,9 @@ enum EGAMESTATES
 // struct for the game character
 struct SGameChar
 {
-    COORD m_cLocation;
-    bool  m_bActive;
-	bool  m_bActive2; // Added this for colorModifier2
+	COORD m_cLocation;
+	bool m_bActive;
+	bool m_bActive2;
 };
 
 void init        ( void );      // initialize your variables, allocate memory, etc
@@ -51,5 +52,6 @@ void renderMap();           // renders the map to the buffer first
 void renderCharacter();     // renders the character into the buffer
 void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
 void renderToScreen();      // dump the contents of the buffer to the screen, one frame worth of game
+void mazeread(std::string load);
 
 #endif // _GAME_H
