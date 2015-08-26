@@ -34,7 +34,7 @@ const int row = 20;		//<----------The MAP Length and Height
 const int col = 60;
 int maze[row][col] = {};
 
-//Array for all the coordinates for Stupid Computer ai and ColorBall
+//Array for all the coordinates for Stupid Computer AI and ColorBall
 short SC_CoordX[4] = {30,45,30,30};
 short SC_CoordY[4] = {1,15,10,9};
 
