@@ -1,0 +1,22 @@
+Jason
+=================================================
+Page to Page Transition,
+Menu Page,
+Wall collision,
+Map rendering,
+Stage rendering.
+
+Zi Yuan
+=================================================
+Background Music,
+Color Modifier Collision,
+Color Modifier Rendering,
+Color Modifier Func,
+
+Heng Soon
+=================================================
+Ai Rendering,
+Ai Movement,
+Ai Collision,
+In Game Text,
+Code Optimization,
