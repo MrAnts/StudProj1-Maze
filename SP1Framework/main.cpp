@@ -1,7 +1,8 @@
 // This is the main file to hold everthing together
-
+#pragma comment(lib, "winmm.lib")
 #include "Framework\timer.h"
 #include "game.h"
+#include "Enemy.h"
 
 CStopWatch g_Timer;                            // Timer function to keep track of time and the frame rate
 bool g_bQuitGame = false;                    // Set to true if you want to quit the game
